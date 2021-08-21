@@ -35,19 +35,6 @@ public class TicTacToeGame {
 		}
 	}
 	
-	public void chooseXOUserComp(char[][] ticTacToeBoard) {
-		char symbolPlayer = 0;
-		char symbolComputer = 0;
-		symbolPlayer = choose_XO();
-
-		if (symbolPlayer == 'X') {
-			symbolComputer = 'O';
-		} else if (symbolPlayer == 'O') {
-			symbolComputer = 'X';
-		}
-		userSelectPositon(ticTacToeBoard,symbolPlayer);
-		computerSelectPositon(ticTacToeBoard,symbolComputer);
-	}
 	
 	public void showBoard(char[][] ticTacToeBoard) {
 		System.out.println("Tic Tac Toe Game Board");
@@ -123,6 +110,69 @@ public class TicTacToeGame {
 		showBoard(ticTacToeBoard);
 	}
 	
+	public String tossCoin() {
+
+		System.out.println("Choose Option\n1.Head 0 \n2.Tail 1\n");
+		int options = SC.nextInt();
+		int tossVal = 0;
+		if (options == 1) {
+			tossVal = 0;
+		} else if (options == 2) {
+			tossVal = 1;
+		} else {
+			System.out.println("Invalid Input");
+		}
+		int tossRandVal = random.nextInt(2);
+		System.out.println("Toss value : " + tossRandVal);
+		if (tossRandVal == tossVal) {
+			System.out.println("Human Turn");
+			return "Human";
+		} else {
+			System.out.println("Computer Turn");
+			return "Computer";
+		}
+	}
+	
+	public void chooseXOUserComp(char[][] ticTacToeBoard) {
+		String firstTurn = tossCoin();
+		char symbolPlayer1 = 0;
+		char symbolPlayer2 = 0;
+		if (firstTurn.equals("Human")) {
+			symbolPlayer1 = choose_XO();
+			
+			if (symbolPlayer1 == 'X') {
+				symbolPlayer2 = 'O';
+			} else if (symbolPlayer1 == 'O') {
+				symbolPlayer2 = 'X';
+			}
+			selectingPositionsOfPlayer(ticTacToeBoard, symbolPlayer1, symbolPlayer2, "Human");
+		} else {
+			int compToss_XO = random.nextInt(2);
+			if (compToss_XO == 1) {
+				symbolPlayer2 = 'X';
+				symbolPlayer1 = 'O';
+			} else if (compToss_XO == 0) {
+				symbolPlayer2 = 'O';
+				symbolPlayer1 = 'X';
+			}
+			selectingPositionsOfPlayer(ticTacToeBoard, symbolPlayer1, symbolPlayer2, "Computer");
+		}
+	}
+	
+	public void selectingPositionsOfPlayer(char[][] ticTacToeBoard, char symbolPlayer1, char symbolPlayer2,
+			String firstPlay) {
+		if (firstPlay.equals("Human")) {
+			while (true) {
+				userSelectPositon(ticTacToeBoard, symbolPlayer1);
+				computerSelectPositon(ticTacToeBoard, symbolPlayer2);
+			}
+		} else {
+			while (true) {
+				computerSelectPositon(ticTacToeBoard, symbolPlayer2);
+				userSelectPositon(ticTacToeBoard, symbolPlayer1);
+			}
+		}
+	}
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
 		char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();	
