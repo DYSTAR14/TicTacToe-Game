@@ -103,6 +103,10 @@ public class TicTacToeGame {
 	public void userSelectPositon(char[][] ticTacToeBoard, char symbolPlayer1) {
 		System.out.println("Enter your Place (1 to 9):");
 		int player1Pos = SC.nextInt();
+		while (player1Position.contains(player1Pos) || player2Position.contains(player1Pos)) {
+			System.out.println("Position is taken, Enter a correct Position");
+			player1Pos = SC.nextInt();
+		}
 		placeOnBoard(ticTacToeBoard, player1Pos, "player1", symbolPlayer1);
 		showBoard(ticTacToeBoard);
 	}
@@ -111,6 +115,10 @@ public class TicTacToeGame {
 
 		int player2Pos;
 		player2Pos = random.nextInt(9)+1;
+		while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
+			System.out.println("Position is taken, Enter a correct Position");
+			player2Pos = random.nextInt(9)+1;
+		}
 		placeOnBoard(ticTacToeBoard, player2Pos, "player2", symbolPlayer2);
 		showBoard(ticTacToeBoard);
 	}
