@@ -41,9 +41,20 @@ public class TicTacToeGame {
 		}
 	}
 	
+	public void showBoard(char[][] ticTacToeBoard) {
+		System.out.println("Tic Tac Toe Game Board");
+		for (char[] row : ticTacToeBoard) {
+			for (char col : row) {
+				System.out.print(col + " ");
+			}
+			System.out.println();
+		}
+	}
+	
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
 		char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();	
 		ticTacToeGame.chooseXOUserComp(ticTacToeBoard);
+		ticTacToeGame.showBoard(ticTacToeBoard);
 	}
 }
