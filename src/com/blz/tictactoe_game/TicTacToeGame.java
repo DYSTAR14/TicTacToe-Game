@@ -1,6 +1,7 @@
 package com.blz.tictactoe_game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -10,6 +11,28 @@ public class TicTacToeGame {
 	static List<Integer> player1Position = new ArrayList<>();
 	static List<Integer> player2Position = new ArrayList<>();
 	Random random = new Random();
+	List<List<Integer>> winningList;
+	
+	TicTacToeGame() {
+
+		List<Integer> topRow = Arrays.asList(1, 2, 3);
+		List<Integer> midRow = Arrays.asList(4, 5, 6);
+		List<Integer> bottomRow = Arrays.asList(7, 8, 9);
+		List<Integer> topCol = Arrays.asList(1, 4, 7);
+		List<Integer> midCol = Arrays.asList(2, 5, 8);
+		List<Integer> bottomCol = Arrays.asList(3, 6, 9);
+		List<Integer> diagonal1 = Arrays.asList(1, 5, 9);
+		List<Integer> diagonal2 = Arrays.asList(3, 5, 7);
+		winningList = new ArrayList<>();
+		winningList.add(topRow);
+		winningList.add(midRow);
+		winningList.add(bottomRow);
+		winningList.add(topCol);
+		winningList.add(midCol);
+		winningList.add(bottomCol);
+		winningList.add(diagonal1);
+		winningList.add(diagonal2);
+	}
 	
 	public char[][] createTicTacToeBoard() {
 		char[][] ticTacToeBoard = { { '1', '|', '2', '|', '3' }, 
@@ -87,27 +110,54 @@ public class TicTacToeGame {
 		}
 	}
 	
-	public void userSelectPositon(char[][] ticTacToeBoard, char symbolPlayer1) {
+	public String checkWinner(char[][] ticTacToeBoard) {
+
+		for (List<Integer> list : winningList) {
+			if (TicTacToeGame.player1Position.containsAll(list)) {
+				return "Congratulation You Won";
+			} else if (TicTacToeGame.player2Position.containsAll(list)) {
+				return "Oops! Computer Won";
+			} else if (TicTacToeGame.player1Position.size() + TicTacToeGame.player2Position.size() == 9) {
+				return "**TIE**";
+			}
+		}
+		return "";
+	}
+	
+	public boolean userSelectPositon(char[][] ticTacToeBoard, char symbolPlayer1) {
 		System.out.println("Enter your Place (1 to 9):");
 		int player1Pos = SC.nextInt();
+
 		while (player1Position.contains(player1Pos) || player2Position.contains(player1Pos)) {
 			System.out.println("Position is taken, Enter a correct Position");
 			player1Pos = SC.nextInt();
 		}
 		placeOnBoard(ticTacToeBoard, player1Pos, "player1", symbolPlayer1);
+
+		String result = checkWinner(ticTacToeBoard);
 		showBoard(ticTacToeBoard);
+		if (result.length() > 0) {
+			System.out.println(result);
+			return true;
+		}
+		return false;
 	}
 	
-	public void computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
+	public boolean computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
 
 		int player2Pos;
 		player2Pos = random.nextInt(9)+1;
 		while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
-			System.out.println("Position is taken, Enter a correct Position");
 			player2Pos = random.nextInt(9)+1;
 		}
 		placeOnBoard(ticTacToeBoard, player2Pos, "player2", symbolPlayer2);
+		String result = checkWinner(ticTacToeBoard);
 		showBoard(ticTacToeBoard);
+		if (result.length() > 0) {
+			System.out.println(result);
+			return true;
+		}
+		return false;
 	}
 	
 	public String tossCoin() {
@@ -163,19 +213,34 @@ public class TicTacToeGame {
 			String firstPlay) {
 		if (firstPlay.equals("Human")) {
 			while (true) {
-				userSelectPositon(ticTacToeBoard, symbolPlayer1);
-				computerSelectPositon(ticTacToeBoard, symbolPlayer2);
+				boolean exit = userSelectPositon(ticTacToeBoard, symbolPlayer1);
+				if (exit) {
+					break;
+				}
+				exit = computerSelectPositon(ticTacToeBoard, symbolPlayer2);
+				if (exit) {
+					break;
+				}
 			}
 		} else {
 			while (true) {
-				computerSelectPositon(ticTacToeBoard, symbolPlayer2);
-				userSelectPositon(ticTacToeBoard, symbolPlayer1);
+				boolean exit = computerSelectPositon(ticTacToeBoard, symbolPlayer2);
+				if (exit) {
+					break;
+				}
+				exit = userSelectPositon(ticTacToeBoard, symbolPlayer1);
+				if (exit) {
+					break;
+				}
+
 			}
 		}
 	}
+	
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
 		char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();	
+		System.out.println("\nLet's Play Tic Tac Toe Game");
 		ticTacToeGame.chooseXOUserComp(ticTacToeBoard);
 	}
 }
