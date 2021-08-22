@@ -12,6 +12,8 @@ public class TicTacToeGame {
 	static List<Integer> player1Position = new ArrayList<>();
 	static List<Integer> player2Position = new ArrayList<>();
 	List<Integer> corners = Arrays.asList(1, 3, 7, 9);
+	List<Integer> centre = Arrays.asList(5);
+	List<Integer> sides = Arrays.asList(2, 6, 4, 8);
 	Random random = new Random();
 	List<Integer> list;
 	List<List<Integer>> winningList;
@@ -216,11 +218,15 @@ public class TicTacToeGame {
 				player2Pos = corners.get(index);
 			}
 			return player2Pos;
-		}
-		else {
-			player2Pos = random.nextInt(9)+1;
+		} else if (!player1Player2Position.containsAll(centre)) {
+			player2Pos = corners.get(0);
+			return player2Pos;
+		} else {
+			int index = random.nextInt(sides.size());
+			player2Pos = sides.get(index);
 			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
-				player2Pos = random.nextInt(9)+1;
+				index = random.nextInt(sides.size());
+				player2Pos = sides.get(index);
 			}
 			return player2Pos;
 		}
