@@ -63,7 +63,6 @@ public class TicTacToeGame {
 		}
 	}
 	
-	
 	public void showBoard(char[][] ticTacToeBoard,String string) {
 		System.out.println(string);
 		for (char[] row : ticTacToeBoard) {
@@ -121,6 +120,7 @@ public class TicTacToeGame {
 		}
 		return false;
 	}
+	
 	public String checkWinner(char[][] ticTacToeBoard) {
 
 		for (List<Integer> list : winningList) {
@@ -255,7 +255,6 @@ public class TicTacToeGame {
 	
 	public boolean computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
 
-		
 		list = new ArrayList<>();
 		list = winListPlayer2();
 		int player2Pos = 0;
@@ -354,11 +353,25 @@ public class TicTacToeGame {
 		}
 	}
 	
+	public static void playTicTacToeGame(TicTacToeGame ticTacToeGame) {
+		while (true) {
+			char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();
+			player1Position = new ArrayList<>();
+			player2Position = new ArrayList<>();
+			ticTacToeGame.showBoard(ticTacToeBoard,"Tic Tac Toe Game Board");
+			System.out.println("\nYou Want To Play Game\nEnter\n1.Play\n2.Exit");
+			int option = SC.nextInt();
+			if (option == 1) {
+				ticTacToeGame.chooseXOUserComp(ticTacToeBoard);
+			} else {
+				break;
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
-		char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();	
 		System.out.println("\nLet's Play Tic Tac Toe Game");
-		ticTacToeGame.showBoard(ticTacToeBoard,"Tic Tac Toe Game Board");
-		ticTacToeGame.chooseXOUserComp(ticTacToeBoard);
+		playTicTacToeGame(ticTacToeGame);
 	}
 }
