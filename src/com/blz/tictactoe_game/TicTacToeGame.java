@@ -2,6 +2,7 @@ package com.blz.tictactoe_game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -143,12 +144,50 @@ public class TicTacToeGame {
 		return false;
 	}
 	
+	public List<Integer> winListPlayer2() {
+		List<Integer> list = new ArrayList<>();
+		for (List<Integer> winList : winningList) {
+			int count = 0;
+			for (int i = 0; i < winList.size(); i++) {
+				if (player2Position.contains(winList.get(i))) {
+					count++;
+				}
+			}
+			if (count == 2) {
+				for (Integer val : winList) {
+					if (!player2Position.contains(val)) {
+						list.add(val);
+					}
+				}
+			}
+		}
+
+		Iterator<Integer> itr = list.iterator();
+		while (itr.hasNext()) {
+			int data = (Integer) itr.next();
+			if (player1Position.contains(data) || player2Position.contains(data)) {
+				itr.remove();
+			}
+		}
+		return list;
+	}
+	
 	public boolean computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
 
-		int player2Pos;
-		player2Pos = random.nextInt(9)+1;
-		while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
+		List<Integer> list;
+		list = new ArrayList<>();
+		list = winListPlayer2();
+		int player2Pos = 0;
+		if (list.isEmpty()) {
 			player2Pos = random.nextInt(9)+1;
+			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
+				player2Pos = random.nextInt(9)+1;
+			}	
+		} else if (list.size() == 1) {
+			player2Pos = list.get(0);
+		} else {
+			int index = random.nextInt(list.size());
+			player2Pos = list.get(index);
 		}
 		placeOnBoard(ticTacToeBoard, player2Pos, "player2", symbolPlayer2);
 		String result = checkWinner(ticTacToeBoard);
