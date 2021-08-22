@@ -115,15 +115,21 @@ public class TicTacToeGame {
 		}
 	}
 	
+	public boolean playTillBoardFull() {
+		if(player1Position.size() + player2Position.size() == 9) {
+			return true;
+		}
+		return false;
+	}
 	public String checkWinner(char[][] ticTacToeBoard) {
 
 		for (List<Integer> list : winningList) {
-			if (TicTacToeGame.player1Position.containsAll(list)) {
+			if (player1Position.containsAll(list)) {
 				return "Congratulation You Won";
-			} else if (TicTacToeGame.player2Position.containsAll(list)) {
+			} else if (player2Position.containsAll(list)) {
 				return "Oops! Computer Won";
-			} else if (TicTacToeGame.player1Position.size() + TicTacToeGame.player2Position.size() == 9) {
-				return "**TIE**";
+			} else if (playTillBoardFull()) {
+				return "It's TIE \nNo One's Win";
 			}
 		}
 		return "";
