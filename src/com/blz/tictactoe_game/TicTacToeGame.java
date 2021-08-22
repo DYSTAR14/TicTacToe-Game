@@ -12,6 +12,7 @@ public class TicTacToeGame {
 	static List<Integer> player1Position = new ArrayList<>();
 	static List<Integer> player2Position = new ArrayList<>();
 	Random random = new Random();
+	List<Integer> list;
 	List<List<Integer>> winningList;
 	
 	TicTacToeGame() {
@@ -60,8 +61,8 @@ public class TicTacToeGame {
 	}
 	
 	
-	public void showBoard(char[][] ticTacToeBoard) {
-		System.out.println("Tic Tac Toe Game Board");
+	public void showBoard(char[][] ticTacToeBoard,String string) {
+		System.out.println(string);
 		for (char[] row : ticTacToeBoard) {
 			for (char col : row) {
 				System.out.print(col + " ");
@@ -136,12 +137,41 @@ public class TicTacToeGame {
 		placeOnBoard(ticTacToeBoard, player1Pos, "player1", symbolPlayer1);
 
 		String result = checkWinner(ticTacToeBoard);
-		showBoard(ticTacToeBoard);
+		showBoard(ticTacToeBoard,"Your Move.....");
 		if (result.length() > 0) {
 			System.out.println(result);
+			showBoard(ticTacToeBoard,"");
 			return true;
 		}
 		return false;
+	}
+	
+	public List<Integer> winListPlayer1() {
+		List<Integer> list = new ArrayList<>();
+		for (List<Integer> winList : winningList) {
+			int count = 0;
+			for (int i = 0; i < winList.size(); i++) {
+				if (player1Position.contains(winList.get(i))) {
+					count++;
+				}
+			}
+			if (count == 2) {
+				for (Integer val : winList) {
+					if (!player1Position.contains(val)) {
+						list.add(val);
+					}
+				}
+			}
+		}
+
+		Iterator<Integer> itr = list.iterator();
+		while (itr.hasNext()) {
+			int data = (Integer) itr.next();
+			if (player1Position.contains(data) || player2Position.contains(data)) {
+				itr.remove();
+			}
+		}
+		return list;
 	}
 	
 	public List<Integer> winListPlayer2() {
@@ -172,12 +202,10 @@ public class TicTacToeGame {
 		return list;
 	}
 	
-	public boolean computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
-
-		List<Integer> list;
-		list = new ArrayList<>();
-		list = winListPlayer2();
+	public int blockOpponent() {
 		int player2Pos = 0;
+		list = new ArrayList<>();
+		list = winListPlayer1();
 		if (list.isEmpty()) {
 			player2Pos = random.nextInt(9)+1;
 			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
@@ -189,11 +217,29 @@ public class TicTacToeGame {
 			int index = random.nextInt(list.size());
 			player2Pos = list.get(index);
 		}
+		return player2Pos;
+	}
+	
+	public boolean computerSelectPositon(char[][] ticTacToeBoard, char symbolPlayer2) {
+
+		
+		list = new ArrayList<>();
+		list = winListPlayer2();
+		int player2Pos = 0;
+		if (list.isEmpty()) {
+			player2Pos = blockOpponent();
+		} else if (list.size() == 1) {
+			player2Pos = list.get(0);
+		} else {
+			int index = random.nextInt(list.size());
+			player2Pos = list.get(index);
+		}
 		placeOnBoard(ticTacToeBoard, player2Pos, "player2", symbolPlayer2);
 		String result = checkWinner(ticTacToeBoard);
-		showBoard(ticTacToeBoard);
+		showBoard(ticTacToeBoard,"Computer Move.....");
 		if (result.length() > 0) {
 			System.out.println(result);
+			showBoard(ticTacToeBoard,"");
 			return true;
 		}
 		return false;
@@ -212,12 +258,11 @@ public class TicTacToeGame {
 			System.out.println("Invalid Input");
 		}
 		int tossRandVal = random.nextInt(2);
-		System.out.println("Toss value : " + tossRandVal);
 		if (tossRandVal == tossVal) {
-			System.out.println("Human Turn");
+			System.out.println("You Won Toss");
 			return "Human";
 		} else {
-			System.out.println("Computer Turn");
+			System.out.println("Computer Won Toss");
 			return "Computer";
 		}
 	}
@@ -280,6 +325,7 @@ public class TicTacToeGame {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
 		char[][] ticTacToeBoard = ticTacToeGame.createTicTacToeBoard();	
 		System.out.println("\nLet's Play Tic Tac Toe Game");
+		ticTacToeGame.showBoard(ticTacToeBoard,"Tic Tac Toe Game Board");
 		ticTacToeGame.chooseXOUserComp(ticTacToeBoard);
 	}
 }
