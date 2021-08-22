@@ -11,6 +11,7 @@ public class TicTacToeGame {
 	static final Scanner SC = new Scanner(System.in);
 	static List<Integer> player1Position = new ArrayList<>();
 	static List<Integer> player2Position = new ArrayList<>();
+	List<Integer> corners = Arrays.asList(1, 3, 7, 9);
 	Random random = new Random();
 	List<Integer> list;
 	List<List<Integer>> winningList;
@@ -202,15 +203,35 @@ public class TicTacToeGame {
 		return list;
 	}
 	
+	public int winPositionOfComputer() {
+		int player2Pos = 0;
+		List<Integer> player1Player2Position = new ArrayList<>();
+		player1Player2Position.addAll(player1Position);
+		player1Player2Position.addAll(player2Position);
+		if (!player1Player2Position.containsAll(corners)) {
+			int index = random.nextInt(corners.size());
+			player2Pos = corners.get(index);
+			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
+				index = random.nextInt(corners.size());
+				player2Pos = corners.get(index);
+			}
+			return player2Pos;
+		}
+		else {
+			player2Pos = random.nextInt(9)+1;
+			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
+				player2Pos = random.nextInt(9)+1;
+			}
+			return player2Pos;
+		}
+	}
+	
 	public int blockOpponent() {
 		int player2Pos = 0;
 		list = new ArrayList<>();
 		list = winListPlayer1();
 		if (list.isEmpty()) {
-			player2Pos = random.nextInt(9)+1;
-			while (player1Position.contains(player2Pos) || player2Position.contains(player2Pos)) {
-				player2Pos = random.nextInt(9)+1;
-			}	
+			player2Pos = winPositionOfComputer();
 		} else if (list.size() == 1) {
 			player2Pos = list.get(0);
 		} else {
