@@ -155,6 +155,17 @@ public class TicTacToeGame {
 		return false;
 	}
 	
+	public List<Integer> removeUsePosition(List<Integer> list){
+		Iterator<Integer> itr = list.iterator();
+		while (itr.hasNext()) {
+			int data = (Integer) itr.next();
+			if (player1Position.contains(data) || player2Position.contains(data)) {
+				itr.remove();
+			}
+		}
+		return list;
+	}
+	
 	public List<Integer> winListPlayer1() {
 		List<Integer> list = new ArrayList<>();
 		for (List<Integer> winList : winningList) {
@@ -172,14 +183,7 @@ public class TicTacToeGame {
 				}
 			}
 		}
-
-		Iterator<Integer> itr = list.iterator();
-		while (itr.hasNext()) {
-			int data = (Integer) itr.next();
-			if (player1Position.contains(data) || player2Position.contains(data)) {
-				itr.remove();
-			}
-		}
+		list = removeUsePosition(list);
 		return list;
 	}
 	
@@ -200,14 +204,7 @@ public class TicTacToeGame {
 				}
 			}
 		}
-
-		Iterator<Integer> itr = list.iterator();
-		while (itr.hasNext()) {
-			int data = (Integer) itr.next();
-			if (player1Position.contains(data) || player2Position.contains(data)) {
-				itr.remove();
-			}
-		}
+		list = removeUsePosition(list);
 		return list;
 	}
 	
